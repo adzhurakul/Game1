@@ -26,6 +26,8 @@ public class Main {
 
         int userScore = 0;
 
+        System.out.println("Начинаем игру. По команде /hint доступен список подсказок.");
+
         for (var l : levels) {
 
             var currQuestion = getCurrentQuestion(questions, l.id());
@@ -67,8 +69,8 @@ public class Main {
 
             case FiftyFifty:
 
-                List<String> hintChoices = new ArrayList<>();
-                hintChoices.add(choices.get(answerId));
+                var hintChoices = new HashMap<>();
+                hintChoices.put(answerId, choices.get(answerId - 1));
 
                 int wrongChoiceId;
                 var rand = new Random();
@@ -76,15 +78,15 @@ public class Main {
                 do {
                     wrongChoiceId = rand.nextInt(choices.size());
                 }
-                while (wrongChoiceId == answerId);
+                while (wrongChoiceId == (answerId - 1));
 
-                hintChoices.add(choices.get(wrongChoiceId));
-                Collections.shuffle(hintChoices);
+                hintChoices.put(wrongChoiceId + 1, choices.get(wrongChoiceId));
 
                 System.out.println("Варианты ответа после подсказки 50х50: ");
 
-                for (int i = 0; i < hintChoices.size(); i++)
-                    System.out.println((i + 1) + ": " + hintChoices.get(i));
+                for (var hintChoice : hintChoices.entrySet()) {
+                    System.out.println(hintChoice.getKey() + ": " + hintChoice.getValue());
+                }
 
                 break;
             case FriendCall:
@@ -189,9 +191,9 @@ public class Main {
 
             switch (h)
             {
-                case Hint.AudienceHelp -> System.out.println(i + " Помощь зала");
-                case Hint.FiftyFifty -> System.out.println(i + " 50 на 50");
-                case Hint.FriendCall -> System.out.println(i + " Звонок другу");
+                case Hint.AudienceHelp -> System.out.println((i + 1) + " Помощь зала");
+                case Hint.FiftyFifty -> System.out.println((i + 1) + " 50 на 50");
+                case Hint.FriendCall -> System.out.println((i + 1) + " Звонок другу");
             }
         }
     }
